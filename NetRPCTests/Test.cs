@@ -10,7 +10,8 @@ public class CommunicationTests
 	[Test]
 	public void StartServer ()
 	{
-		var server = new NetworkContext (NetworkContext.ContextType.Server);
+		var serializer = new BinarySerializer ();
+		var server = new NetworkContext (NetworkContext.ContextType.Server, serializer);
 		server.Connect (IPAddress.Loopback, 1702);
 		Thread.Sleep (100);
 		Assert.IsTrue (server.IsRunning);
@@ -21,7 +22,8 @@ public class CommunicationTests
 	[Test]
 	public void StartClient ()
 	{
-		var client = new NetworkContext (NetworkContext.ContextType.Client);
+		var serializer = new BinarySerializer ();
+		var client = new NetworkContext (NetworkContext.ContextType.Client, serializer);
 		client.Connect (IPAddress.Loopback, 1701);
 		Thread.Sleep (100);
 		Assert.IsTrue (client.IsRunning);
@@ -39,8 +41,9 @@ public class CommunicationTests
 	[Test]
 	public void SendMessageFromServerToClient ()
 	{
-		using (var server = new NetworkContext (NetworkContext.ContextType.Server))
-		using (var client = new NetworkContext (NetworkContext.ContextType.Client))
+		var serializer = new BinarySerializer ();
+		using (var server = new NetworkContext (NetworkContext.ContextType.Server, serializer))
+		using (var client = new NetworkContext (NetworkContext.ContextType.Client, serializer))
 		{
 			server.Connect (IPAddress.Loopback, 1701);
 			Thread.Sleep (100);
